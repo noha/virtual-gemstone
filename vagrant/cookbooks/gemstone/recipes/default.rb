@@ -25,15 +25,19 @@ package "unzip" do
   action :install
 end
 
-unless File.exists?("/opt/gemstone/#{dir}/version.txt")
+unless File.exists?("#{tmp}/#{file}")
    remote_file "#{tmp}/#{file}" do
       source "http://glass-downloads.gemstone.com/gss30/#{file}"
       action :create_if_missing
    end
+end
 
-
+unless File.exists?("/opt/gemstone/#{dir}/version.txt")
    execute "unzip #{tmp}/#{file}" do
       cwd "/opt/gemstone"
+   end
+
+   execute "chown -R gemstone /opt/gemstone" do
    end
 
    execute "ln -s #{dir} product" do
