@@ -1,0 +1,13 @@
+check process <%= @gem_name %>-<%= @gem_port %> with pidfile /var/tmp/<%= @gem_name %>-<%= @gem_port %>.pid
+   start = "/opt/application/bin/start-gem <%= @gem_name %> <%= @gem_port %>" as uid <%= @gem_user %>
+   stop = "/opt/application/bin/stop-gem <%= @gem_name %> <%= @gem_port %>" as uid 0
+   # Empty FastCGI request
+   if failed port <%= @gem_port %>
+     # Send FastCGI packet: version 1 (0x01), cmd FCGI_GET_VALUES (0x09)
+     # padding 8 bytes (0x08), followed by 8xNULLs padding
+     send "\0x01\0x09\0x00\0x00\0x00\0x00\0x08\0x00\0x00\0x00\0x00\0x00\0x00\0x00\0x00\0x00"
+     # Expect FastCGI packet: version 1 (0x01), resp FCGI_GET_VALUES_RESULT (0x0A).
+     expect "\0x01\0x0A"              
+     timeout 5 seconds 
+   then restart
+

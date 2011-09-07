@@ -1,0 +1,28 @@
+upstream fastcgi {
+   <%= @upstream %>
+   fair;
+}
+
+server {
+   listen 80;
+   server_name <%= @server_name %>;
+   keepalive_timeout  70;
+   root /var/www;
+
+   location / {
+      set $appname "<%= @application_path %>";
+      try_files $uri @default;
+   }
+
+   location @default {
+      include /etc/nginx/fastcgi_params;
+
+      fastcgi_param  SCRIPT_NAME $appname$fastcgi_script_name;
+      fastcgi_param  REQUEST_URI $appname$request_uri;
+      fastcgi_param  DOCUMENT_URI $appname$document_uri;
+
+      fastcgi_intercept_errors on;
+      fastcgi_pass taskforus;
+   }
+}
+

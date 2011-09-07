@@ -1,0 +1,22 @@
+set daemon  60           # check services every minute
+   with start delay 120  # delay the first check by 2-minutes 
+
+#set logfile syslog facility log_daemon                       
+set logfile /var/log/monit.log
+
+set idfile /var/.monit.id
+set statefile /var/.monit.state
+#set mailserver vz10               # primary mailserver
+#set mail-format { from: daemon@mydomain.com }
+
+set eventqueue
+    basedir /var/monit  # set the base directory where events will be stored
+    slots 100           # optionally limit the queue size
+
+#set httpd port 2812 and
+#     use address 192.168.10.42
+#     allow 10.8.0.2
+#     allow localhost        # allow localhost to connect to the server and
+
+include /etc/monit/conf.d/*
+

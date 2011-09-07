@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$2" == "" ];
+then
+   echo "usage. $0 [stone name] [port]"
+   exit 1
+fi
+
+echo $$ > /var/tmp/$1-$2.pid
+
+source /opt/application/$1/env
+source /opt/application/$1/etc/gem.conf
+export GEMSTONE_USER=DataCurator
+export GEMSTONE_PASSWORD=swordfish
+export GEMSTONE_NAME=$1
+export TEMPORARY_OBJECT_MEMORY=$GEM_TEMPOBJ_CACHE_SIZE
+export LOGFILE=/opt/application/$1/log/$1-$2.log
+exec /opt/application/bin/gs-start-gem $1 $2 

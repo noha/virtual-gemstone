@@ -17,7 +17,10 @@
 # limitations under the License.
 #
 include_recipe "git"
-include_recipe "munin"
+#include_recipe "munin"
+include_recipe "monit"
+include_recipe "logrotate"
+include_recipe "logcheck"
 include_recipe "nginx"
 include_recipe "gemstone"
 include_recipe "stone-creator"
