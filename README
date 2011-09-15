@@ -8,12 +8,32 @@ Installation
 
 git clone https://github.com/<repository>/virtual-gemstone.git 
 
-create a vagrant base box using veewee:
+=create a vagrant base box using veewee:=
+ cd virtual-gemstone
+ vagrant basebox build 'gemstone'
 
-create a box from the base box, and run the gemstone and nginx installation and configuration scripts.
+run integration specs:
+ vagrant basebox validate gemstone
 
-cd vagrant
-vagrant up
+create a .box file in the current directory, for reuse or export to other users:
+ vagrant basebox export gemstone
+
+add the box to the list of boxes on the current machine, so you can vagrant box init from it later:
+ vagrant box add 'gemstone' 'gemstone.box'
+
+check that it exists:
+ vagrant box list
+
+Now you have a running box. See below for how to install gemstone on it. If you want to run another box on this machine:
+
+ cd <empty directory where you want the box>
+ vagrant box init gemstone #this will create a Vagrantfile in the directory that you can configure to taste. See vagrantup.com for details.
+
+How to install gemstone, nginx etc on this box?
+
+In the directory with the Vagrantile: 
+ 
+ vagrant up
 
 test it:
 
@@ -23,12 +43,13 @@ vagrant ssh
 
 use the text browser in the box to see the site
 
+(todo, nginx recipe not completed yet).
 lynx https://localhost
 
 
 
 How it works
-Virtual Gemstone is built on Vagrant (http://www.vagrantup.com), a command line interface that lets you create, destroy VMs at will, and run Puppet or Chef configuration management scripts
-We use veewee to generate the vagrant vm from a standard debian VM, so you can be 100% sure where your VM comes from, and you can configure it as you wish.
+Virtual Gemstone is built on Vagrant (http://www.vagrantup.com), a command line interface that lets you create, destroy VMs at will, and run Chef configuration management scripts
+We use veewee to generate the vagrant vm from a standard ubuntu 11.04 LTS VM, so you can be 100% sure where your VM comes from, and you can configure it as you wish.
 
 Credits
