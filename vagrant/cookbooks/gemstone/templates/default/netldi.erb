@@ -22,7 +22,7 @@ do_start()
   GEMSTONE=/opt/gemstone/product
   GEMSTONE_NRS_ALL=#dir:/opt/gemstone/log
   export GEMSTONE GEMSTONE_NRS_ALL
-  su -m $RUNASUSER -c "/opt/gemstone/product/bin/startnetldi -g -a $RUNASUSER"
+  su -m $RUNASUSER -c "/opt/gemstone/product/bin/startnetldi -g -a $RUNASUSER -p 50378:50378"
 }
 
 # Function that stops the daemon/service
