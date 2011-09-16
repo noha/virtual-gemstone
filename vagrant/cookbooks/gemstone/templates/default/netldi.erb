@@ -6,6 +6,15 @@ DESC="netldi service"
 NAME=netldi
 SCRIPTNAME=/etc/init.d/$NAME
 RUNASUSER=gemstone
+DEFSEASIDE=/opt/gemstone/product/seaside/defSeaside
+
+if [ ! -r $DEFSEASIDE ] ;
+then
+   log_failure_msg "Seaside ENV script doesnt exists at $DEFSEASIDE"
+    exit 3
+fi
+
+. $DEFSEASIDE
 
 # Function that starts the daemon/service
 do_start()
