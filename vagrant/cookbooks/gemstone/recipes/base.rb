@@ -8,12 +8,12 @@
 include_recipe "gemstone::os"
 
 tmp = Chef::Config[:file_cache_path]
+base_url = "#{node[:gemstone][:base_url]}"
 file = "#{node[:gemstone][:version]}.zip"
 dir = "#{node[:gemstone][:dir]}/#{node[:gemstone][:version]}"
 
 archive_local = "#{tmp}/#{file}"
-#archive_remote = "http://glass-downloads.gemstone.com/gss30/#{file}"
-archive_remote = "http://10.0.2.2:83/#{file}"
+archive_remote = "#{base_url}/#{file}"
 unless File.exists?("#{dir}/version.txt")
    remote_file "#{archive_local}" do
       source "#{archive_remote}"
@@ -53,8 +53,8 @@ unless File.exists?("#{dir}/version.txt")
       action :create
    end
 
-   remote_file "#{node[:gemstone][:dir]}/product/seaside/etc/gemstone.key" do
-      source "http://seaside.gemstone.com/etc/gemstone30.key-GLASS-Linux-2CPU.txt"
-      action :create_if_missing
-   end
+#   remote_file "#{node[:gemstone][:dir]}/product/seaside/etc/gemstone.key" do
+#      source "http://seaside.gemstone.com/etc/gemstone30.key-GLASS-Linux-2CPU.txt"
+#      action :create_if_missing
+#   end
 end

@@ -11,7 +11,7 @@
 port = node[:gemstone][:low_port];
 while port <  node[:gemstone][:low_port] + node[:gemstone][:no_gems] do
    monit_gem "fastcgi" do
-      gem_name "gem"
+      gem_name "stone-default"
       gem_port "#{port}"
       gem_user "#{node[:gemstone][:user]}"
    end
