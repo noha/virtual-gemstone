@@ -1,0 +1,34 @@
+This document is supposed to collect ideas about what a virtual-gemstone distribution should consist of.The name of the file is requirements but it is something that is between a requirements list and a wish list. So don't hesitate to add things to the list. We can argue and remove it if necessary :)
+
+basic requirements:
+
+- this package should be able to produce a gemstone appliance from scratch
+- from scratch means that you can specify even low level details once (memory, disk space, operating system to use) and the scripts in this package should be able to bootstrap the whole appliance
+- in order to be able to serve as many use cases as possible the package should be kept modular. For the early stages we decide to use certain components but most of the components should be exchangable
+- most recipes should provide functions for stuff they do. This way it is easy to integrate them in custome recipes. The recipes should form a toolbox that can be used even if some does not like the provided machine recipes
+
+basic components:
+
+- gemstone 
+- any gemstone web adaptor
+- nginx web server
+- monit to start gems
+
+machines we like to have:
+
+- production
+- developement (includes gemtools,...)
+- continous integration (jenkins, build tools, ...)
+
+things we like to have (names in parenthesis should reflect the person that added the issue):
+
+- I like to be able to decide the version of gemstone to use on my own (e.g. 2.4.4.x vs. 3.0) (norbert)
+- nginx should provide SSL configuration (stephan, willem)
+- I want to specify a number of stones, their names and how many gems should be started for each
+- support for Zinc http components (norbert)
+- support for Iliad (norbert)
+- support for fastcgi (norbert)
+- support for pier (norbert)
+- maintenance of gemstone (removing sessions, garbage collection, removing logs, ...) (norbert)
+- maintenance of operating system (logrotate, logcheck, ...) (norbert)
+- backup of gemstone locally and remote so an appliance can be easily integrate in another IT environment (norbert)
