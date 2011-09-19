@@ -37,6 +37,10 @@ Gofer new
 MCPlatformSupport commitOnAlmostOutOfMemoryDuring: [
    (Smalltalk at: #ConfigurationOfSeaside30) project lastVersion load
 ].
+
+\\\"fix content length parsing problem. http://code.google.com/p/glassdb/issues/detail?id=298\\\"
+FSRole compile: 'contentLengthHeader
+   ^((params at: ''CONTENT_LENGTH'' ifAbsent: [''0'']) ifEmpty: [''0'']) asNumber'      
 %
 commit
 logout
