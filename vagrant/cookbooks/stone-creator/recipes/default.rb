@@ -15,7 +15,7 @@ include_recipe "gemstone"
 
 unless File.exists?("/opt/stone-creator")
    git "/opt/stone-creator" do
-      repository "https://git.gitorious.org/gemstone-tools/stone-creator.git"
+      repository "git://github.com/noha/stone-creator.git"
       reference "master"
       action :sync
    end
