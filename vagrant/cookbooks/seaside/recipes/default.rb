@@ -39,7 +39,7 @@ MCPlatformSupport commitOnAlmostOutOfMemoryDuring: [
 ].
 
 \\\"fix content length parsing problem. http://code.google.com/p/glassdb/issues/detail?id=298\\\"
-FSRole compile: 'contentLengthHeader
+(Smalltalk at: #FSRole) compile: 'contentLengthHeader
    ^((params at: ''CONTENT_LENGTH'' ifAbsent: [''0'']) ifEmpty: [''0'']) asNumber'      
 %
 commit
