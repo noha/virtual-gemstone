@@ -32,3 +32,13 @@ bash "adding sysctl settings" do
       fi
    EOH
 end
+
+bash "exchanging /bin/sh. Using bash instead of dash" do
+   code <<-EOH
+      if [ "`readlink /bin/sh`" == "dash" ]; 
+      then 
+         rm /bin/sh
+         ln -s /bin/bash /bin/sh
+      fi
+   EOH
+end
