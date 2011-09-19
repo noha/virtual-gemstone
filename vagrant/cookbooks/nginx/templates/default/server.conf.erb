@@ -1,5 +1,5 @@
 upstream fastcgi {
-   <%= @upstream %>
+   server 127.0.0.1:7000;
    fair;
 }
 
@@ -22,7 +22,7 @@ server {
       fastcgi_param  DOCUMENT_URI $appname$document_uri;
 
       fastcgi_intercept_errors on;
-      fastcgi_pass taskforus;
+      fastcgi_pass fastcgi;
    }
 }
 

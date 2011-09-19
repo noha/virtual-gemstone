@@ -17,13 +17,13 @@ end
 #   port += 1
 #end
 
-template "/etc/nginx/conf.d/s1" do
+template "/etc/nginx/sites-enabled/default" do
    source "server.conf.erb"
    mode 644
    owner "root"
    group "root"
    variables (
-      :server_name => "testparam",
-      :application_path => "/testapppath",
+      :server_name => "localhost",
+      :application_path => "",
       :upstream => $upstream)
 end
