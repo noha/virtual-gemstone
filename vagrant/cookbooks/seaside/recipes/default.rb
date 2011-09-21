@@ -46,4 +46,5 @@ commit
 logout
 exit" | topaz -l
       EOH
+   not_if GemStone.isDefinedClass("stone-default", "WASession")
 end
