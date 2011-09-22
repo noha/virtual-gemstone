@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for config in /etc/gemstone/stones.d/*;
+do
+   source $config
+   source $STONE_DIR/env
+   /opt/application/bin/gs-mfc $STONE_NAME >> $STONE_DIR/log/cleanup-stones.log 2>&1
+done

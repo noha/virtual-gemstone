@@ -1,0 +1,47 @@
+#!/bin/bash
+
+if [ "$1" == "" ];
+then
+   echo "need stone name"
+fi
+
+if [ ! -f /etc/gemstone/stones.d/$1 ];
+then
+   echo "stone $1 is not registered in /etc/gemstone/stones.d"
+fi
+
+source /etc/gemstone/stones.d/$1
+source $STONE_DIR/env
+
+if [ -s $GEMSTONE/seaside/etc/gemstone.secret ]; then
+    . $GEMSTONE/seaside/etc/gemstone.secret
+else
+    echo 'Missing password file $GEMSTONE/seaside/etc/gemstone.secret'
+    exit 1
+fi
+
+if [ ! -d $STONE_DIR/backup ];
+then
+   mkdir $STONE_DIR/backup/
+fi
+
+if [ -f $STONE_DIR/backup/backup.dbf.gz ];
+then
+   mv $STONE_DIR/backup/backup.dbf.gz $STONE_DIR/backup/backup.dbf.old.gz
+fi
+
+$GEMSTONE/bin/topaz -l -T50000 << EOF
+
+set user DataCurator pass swordfish gems $1
+
+display oops
+iferror where
+
+login
+
+run
+SystemRepository startNewLog.
+SystemRepository fullBackupCompressedTo: '$STONE_DIR/backup/backup.dbf.gz'
+%
+EOF
+
