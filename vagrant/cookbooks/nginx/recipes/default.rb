@@ -27,3 +27,8 @@ template "/etc/nginx/sites-enabled/default" do
       :application_path => "",
       :upstream => $upstream)
 end
+
+service "nginx" do
+   supports :start => true, :restart => true, :reload => true
+   action [ :enable,  :start]
+end
