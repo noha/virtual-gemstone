@@ -52,3 +52,19 @@ template "full-backup-stone" do
   mode "0755"
 end
 
+template "backup-stones" do
+  path "/opt/application/bin/backup-stones"
+  source "backup-stones.erb"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+template "backup-stones cron" do
+  path "/etc/cron.d/backup-stones"
+  source "backup-cron.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+

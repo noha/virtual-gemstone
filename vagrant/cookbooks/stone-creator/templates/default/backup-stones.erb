@@ -1,0 +1,9 @@
+#!/bin/sh
+
+for config in /etc/gemstone/stones.d/*;
+do
+   source $config
+   source $STONE_DIR/env
+   /opt/application/bin/full-backup-stone $STONE_NAME >> /opt/application/$STONE_NAME/log/backup.log 2>&1
+done
+
