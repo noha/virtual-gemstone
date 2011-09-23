@@ -9,7 +9,7 @@ Installation
 git clone https://github.com/<repository>/virtual-gemstone.git 
 
 =create a vagrant base box using veewee:=
- cd virtual-gemstone
+ cd virtual-gemstone/veewee
  vagrant basebox build 'gemstone'
 
 run integration specs:
@@ -24,16 +24,12 @@ add the box to the list of boxes on the current machine, so you can vagrant box 
 check that it exists:
  vagrant box list
 
-Now you have a running box. See below for how to install gemstone on it. If you want to run another box on this machine:
+Now you have a running box. Next step is to populate your newly created box. Just do
 
- cd <empty directory where you want the box>
- vagrant box init gemstone #this will create a Vagrantfile in the directory that you can configure to taste. See vagrantup.com for details.
+ cd virtual-gemstone/vagrant
+ vagrant up 
 
-How to install gemstone, nginx etc on this box?
-
-In the directory with the Vagrantile: 
- 
- vagrant up
+If you want to know the details please visit http://vagrantup.com
 
 test it:
 
@@ -44,9 +40,11 @@ vagrant ssh
 use the text browser in the box to see the site
 
 (todo, nginx recipe not completed yet).
+lynx http://localhost
+
+or as soon as SSL is in place:
+
 lynx https://localhost
-
-
 
 How it works
 Virtual Gemstone is built on Vagrant (http://www.vagrantup.com), a command line interface that lets you create, destroy VMs at will, and run Chef configuration management scripts
