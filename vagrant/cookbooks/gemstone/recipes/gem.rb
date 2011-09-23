@@ -43,3 +43,10 @@ template "/opt/application/bin/gs-start-gem" do
    group "root"
    mode "0755"
 end
+
+template "/opt/application/bin/gs-mfc" do
+   source "gs-mfc.erb"
+   owner "root"
+   group "root"
+   mode "0755"
+end

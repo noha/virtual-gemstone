@@ -1,0 +1,88 @@
+#!/bin/bash
+
+if [ -s $GEMSTONE/seaside/etc/gemstone.secret ]; then
+    . $GEMSTONE/seaside/etc/gemstone.secret
+else
+    echo 'Missing password file $GEMSTONE/seaside/etc/gemstone.secret'
+    exit 1
+fi
+
+if [ "$1" == "" ];
+then
+   echo "need stone name"
+   exit 1
+fi
+
+cat << EOF | $GEMSTONE/bin/topaz -ql -T200000
+
+set user DataCurator pass swordfish gems $1
+
+display oops
+iferror where
+
+login
+
+run
+| count expirations |
+count := 0.
+ [ System transactionMode: #manualBegin.
+  ((count \\\\ 600) = 0) 
+    ifTrue: [ 
+      GsFile gciLogServer: DateAndTime now printString.
+      GsFile gciLogServer: 'Starting markForCollect.'.
+      [
+        SystemRepository markForCollection
+      ] on: Error 
+        do: [:ex | 
+          ((ex gsNumber == 3020) _or: [ex gsNumber == 3006])
+            ifTrue: [ | fileSize freeSpace used fileUnit freeUnit usedUnit |
+              fileSize := SystemRepository fileSize / 1024.0.
+              freeSpace := SystemRepository freeSpace / 1024.0.
+              used := fileSize - freeSpace.
+              fileUnit := fileSize > (1024)
+                ifTrue: [
+                  fileSize := fileSize / 1024.
+                  'M']
+                ifFalse: ['K'].
+              freeUnit := freeSpace > (1024)
+                ifTrue: [
+                  freeSpace := freeSpace / 1024.
+                  'M']
+                ifFalse: ['K'].
+              usedUnit := used > (1024)
+                ifTrue: [
+                  used := used / 1024.
+                  'M']
+                ifFalse: ['K'].
+              System beginTransaction.
+              (ObjectLogEntry 
+                trace: 'MTCE: Repository Size' 
+                object: 'Repository: ', fileSize printString, fileUnit, 
+                        ', Free: ', freeSpace printString, freeUnit,
+                        ', Used: ', used printString, usedUnit) addToLog.
+              (ObjectLogEntry trace: 'MTCE: MFC' object: ex) addToLog.
+              System commitTransaction.
+              GsFile gciLogServer: ex description]
+            ifFalse: [ex pass ]
+        ].
+      GsFile gciLogServer: DateAndTime now printString.
+      GsFile gciLogServer: '...finished markForCollect.'.
+    ].
+  "Sleep for a minute"
+  (Delay forSeconds: 60) wait.
+  count := count + 1] 
+    "on: Error, Halt, BreakpointNotification"
+    on: Error
+    do: [:ex | 
+	  System inTransaction
+		ifTrue: [ 
+          DebuggerLogEntry createContinuationLabeled: 'MTCE continuation'.
+          System commitTransaction.
+          System beginTransaction ]
+        ifFalse: [
+          System beginTransaction.
+          DebuggerLogEntry createContinuationLabeled: 'MTCE continuation'.
+          System commitTransaction].
+      ex isResumable ifTrue: [ex resume]].
+%
+EOF
