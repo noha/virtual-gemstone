@@ -1,5 +1,6 @@
 class Chef::Recipe::GemStone
-   @@topazTemplate = "source /opt/gemstone/product/seaside/defSeaside
+   @@topazTemplate = "source /etc/gemstone/stones.d/##STONE_NAME##
+source $STONE_DIR/env
 echo \"set gemstone ##STONE_NAME##
 set username DataCurator
 set password swordfish
@@ -14,21 +15,24 @@ exit 0\" | topaz -l"
    def self.prepareTopazTemplate(stoneName, expression)
       template = @@topazTemplate.clone
       template['##STONE_NAME##'] = stoneName
+      template['##STONE_NAME##'] = stoneName
       template['##EXPRESSION##'] = expression
       template
    end
 
    def self.isTrue(stoneName, expression)
-      topazExpression = "(" << expression << ") ifFalse: [ Error signal: 'false' ]"
-      prepareTopazTemplate(stoneName, topazExpression)
+      doIt(stoneName, "(" << expression << ") ifFalse: [ Error signal: 'false' ]")
    end
 
    def self.isNotNil(stoneName, expression)
-      topazExpression = "(" << expression << ") isNil ifTrue: [ Error signal: 'false' ]"
-      prepareTopazTemplate(stoneName, topazExpression)
+      doIt("stone-default", "(" << expression << ") isNil ifTrue: [ Error signal: 'false' ]")
    end
 
    def self.isDefinedClass(stoneName, expression)
       isNotNil(stoneName, "Smalltalk at: #" << expression);
+   end
+
+   def self.doIt(stoneName, expression)
+      prepareTopazTemplate(stoneName, expression)
    end
 end
