@@ -16,4 +16,11 @@ define :create_stone do
    execute "starting #{params[:stone_name]}" do
       command "/etc/init.d/#{params[:stone_name]} start"
    end
+
+   bash "adding #{params[:stone_name]} to stones.d directory" do
+      code <<-EOH 
+         echo "STONE_NAME=#{params[:stone_name]}" >> #{node[:stone_creator][:stones_dir]}/#{params[:stone_name]}
+         echo "STONE_DIR=#{params[:stone_dir]}" >> #{node[:stone_creator][:stones_dir]}/#{params[:stone_name]}
+      EOH
+   end
 end
