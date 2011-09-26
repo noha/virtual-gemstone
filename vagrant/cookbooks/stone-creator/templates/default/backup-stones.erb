@@ -4,6 +4,13 @@ for config in /etc/gemstone/stones.d/*;
 do
    source $config
    source $STONE_DIR/env
-   /opt/application/bin/full-backup-stone $STONE_NAME >> /opt/application/$STONE_NAME/log/backup.log 2>&1
+   (
+   echo -n "----"
+   date
+   echo -n "----"
+   echo "making full backup"
+   /opt/application/bin/full-backup-stone $STONE_NAME
+   echo "---- deleting old tranlogs"
+   /opt/stone-creator/bin/delete-old-tranlogs.sh -g $GEMSTONE -d $STONE_DIR/data -f $STONE_DIR/backup/backup.dbf.gz -r
+   ) >> $STONE_DIR/log/backup.log 2>&1
 done
-
