@@ -1,6 +1,6 @@
 Vagrant::Config.run do |config|
   config.vm.box = "gemstone"
-  config.vm.boot_mode = :gui
+  #config.vm.boot_mode = :gui
 
   # config.vm.network "33.33.33.10"
 
