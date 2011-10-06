@@ -9,6 +9,7 @@ login
 run
 ##EXPRESSION##
 %
+commit
 logout
 exit 0\" | topaz -l"
 
