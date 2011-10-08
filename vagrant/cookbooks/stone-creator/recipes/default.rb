@@ -68,3 +68,11 @@ template "backup-stones cron" do
   mode "0644"
 end
 
+template "cleanup tranlogs" do
+  path "/opt/application/bin/cleanup-tranlogs"
+  source "cleanup-tranlogs.erb"
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
