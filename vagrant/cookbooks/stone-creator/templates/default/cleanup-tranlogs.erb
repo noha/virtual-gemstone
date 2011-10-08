@@ -1,0 +1,9 @@
+#!/bin/sh
+
+for config in /etc/gemstone/stones.d/*;
+do
+   source $config
+   source $STONE_DIR/env
+   date >> /opt/application/$STONE_NAME/log/cleanup-tranlogs.log
+   /opt/stone-creator/bin/delete-old-tranlogs.sh -g $GEMSTONE -d $STONE_DIR/data -f $STONE_DIR/backup/backup.dbf.gz -r >> $STONE_DIR/log/cleanup-tranlogs.log 2>&1
+done
