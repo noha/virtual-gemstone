@@ -28,11 +28,13 @@ script "install seaside" do
          load.
 
       MCPlatformSupport commitOnAlmostOutOfMemoryDuring: [
-         (Smalltalk at: #ConfigurationOfSeaside30) project lastVersion load
+         ((Smalltalk at: #ConfigurationOfSeaside30) project version: '3.0.5') load.
       ].
-
+   
       \\\"fix content length parsing problem. http://code.google.com/p/glassdb/issues/detail?id=298\\\"
       (Smalltalk at: #FSRole) compile: 'contentLengthHeader
-         ^((params at: ''CONTENT_LENGTH'' ifAbsent: [''0'']) ifEmpty: [''0'']) asNumber'")
-   not_if GemStone.isDefinedClass("stone-default", "ConfigurationOfSeaside30")
+         ^((params at: ''CONTENT_LENGTH'' ifAbsent: [''0'']) ifEmpty: [''0'']) asNumber'.
+      ")
+  
+   not_if GemStone.isDefinedClass("stone-default", "WAFastCGIAdaptor")
 end

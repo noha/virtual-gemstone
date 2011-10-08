@@ -1,6 +1,6 @@
 Vagrant::Config.run do |config|
   config.vm.box = "gemstone"
-  config.vm.boot_mode = :gui
+  #config.vm.boot_mode = :gui
 
   # config.vm.network "33.33.33.10"
 
@@ -12,7 +12,7 @@ Vagrant::Config.run do |config|
 
 
   config.vm.provision :chef_solo do |chef|
-     chef.cookbooks_path = "cookbooks"
+     chef.cookbooks_path = ["cookbooks","site-cookbooks"]
      chef.add_recipe "virtual_gemstone::production"
   #   chef.add_role "web"
   end
