@@ -18,4 +18,10 @@ unless File.exists?("/opt/application/stone-default")
       stone_name "stone-default"
       stone_dir "/opt/application/stone-default"
    end
+
+   script "update GLASS" do
+      interpreter "bash"
+      user        "root"
+      code GemStone.updateGLASS("stone-default")
+   end
 end
