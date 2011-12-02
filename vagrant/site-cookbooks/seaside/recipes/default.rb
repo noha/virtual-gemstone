@@ -28,7 +28,7 @@ script "install seaside" do
          load.
 
       MCPlatformSupport commitOnAlmostOutOfMemoryDuring: [
-         ((Smalltalk at: #ConfigurationOfSeaside30) project version: '3.0.5') load.
+         ((Smalltalk at: #ConfigurationOfSeaside30) project version: '3.0.6.3') load.
       ].
    
       \\\"fix content length parsing problem. http://code.google.com/p/glassdb/issues/detail?id=298\\\"
