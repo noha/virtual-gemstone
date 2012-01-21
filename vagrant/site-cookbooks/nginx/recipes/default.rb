@@ -23,9 +23,9 @@ template "/etc/nginx/sites-enabled/default" do
    owner "root"
    group "root"
    variables (
-      :server_name => "localhost",
+      {:server_name => "localhost",
       :application_path => "",
-      :upstream => $upstream)
+      :upstream => $upstream})
 end
 
 service "nginx" do
