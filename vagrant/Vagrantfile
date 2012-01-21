@@ -13,6 +13,11 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :chef_solo do |chef|
      chef.cookbooks_path = ["cookbooks","site-cookbooks"]
+     chef.json.merge!({
+       :gemstone => {
+		:cache_path =>  "/vagrant/cache"
+	}
+     })
      chef.add_recipe "virtual_gemstone::production"
   #   chef.add_role "web"
   end

@@ -7,7 +7,7 @@
 # All rights reserved - Do Not Redistribute
 include_recipe "gemstone::os"
 
-tmp = Chef::Config[:file_cache_path]
+tmp = node[:gemstone][:cache_path] 
 base_url = "#{node[:gemstone][:base_url]}"
 file = "#{node[:gemstone][:version]}.zip"
 dir = "#{node[:gemstone][:dir]}/#{node[:gemstone][:version]}"
