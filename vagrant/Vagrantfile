@@ -6,7 +6,7 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port("http", 80, 8080)
+  config.vm.forward_port("http",80,7778)
   config.vm.forward_port("gs64ldi", 50377, 50377)
   config.vm.forward_port("gemsession", 50378, 50378)
 
