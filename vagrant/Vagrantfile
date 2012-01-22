@@ -1,5 +1,14 @@
+#http://vagrantup.com/docs/vagrantfile.html
 Vagrant::Config.run do |config|
-  config.vm.box = "gemstone"
+ 
+  #e.g. "gemstone-ubuntu11.10-ruby192"
+  gemstone_vm = ENV["gemstone_vm"]
+  if (!gemstone_vm.nil? && !gemstone_vm.empty?  ) 
+    config.vm.box = gemstone_vm
+    #config.vm.memory_size = 1024
+  else
+    config.vm.box = "gemstone"
+  end
   #config.vm.boot_mode = :gui
 
   # config.vm.network "33.33.33.10"
