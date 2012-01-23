@@ -32,3 +32,24 @@ desc "install already built basebox for ubuntu 11.10"
 task "basebox_install_11_10" do
   install_basebox("gemstone-ubuntu11.10-ruby192")
 end
+
+full_box_name = "gemstone-ubuntu11.10-ruby192-full"
+desc "package fully loaded box"
+task "package_box" do
+  cd 'vagrant'
+  rm_rf "package.box"
+  rm_rf "#{full_box_name}.box"
+  sh("vagrant package --vagrantfile Vagrantfile.pkg #{full_box_name}")
+  mv 'package.box', "#{full_box_name}.box"
+  cd '..'
+end
+
+desc "install fully loaded box"
+task "add_packaged_box" => ['package_box'] do
+  cd 'vagrant'
+  output = `vagrant box list`
+  sh("vagrant box remove #{full_box_name}") if output.include?(full_box_name)
+  sh("vagrant box add '#{full_box_name}' #{full_box_name}.box")
+  cd '..'
+end
+
