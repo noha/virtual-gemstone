@@ -1,19 +1,40 @@
+#http://vagrantup.com/docs/vagrantfile.html
 Vagrant::Config.run do |config|
-  config.vm.box = "gemstone"
+ 
+  #e.g. "gemstone-ubuntu11.10-ruby192"
+  gemstone_vm = ENV["gemstone_vm"]
+  if (!gemstone_vm.nil? && !gemstone_vm.empty?  ) 
+    config.vm.box = gemstone_vm
+    #config.vm.memory_size = 1024
+  else
+    config.vm.box = "gemstone"
+  end
   #config.vm.boot_mode = :gui
 
   # config.vm.network "33.33.33.10"
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port("http", 80, 8080)
-  config.vm.forward_port("gs64ldi", 50377, 50377)
-  config.vm.forward_port("gemsession", 50378, 50378)
-
+  # port forwarding can be disabled for builds by setting vagrant_env 
+  vagrant_env = ENV["vagrant_env"]
+  if(vagrant_env.nil? || vagrant_env != "build")
+    config.vm.forward_port("http",80,7778)
+    config.vm.forward_port("gs64ldi", 50377, 50377)
+    config.vm.forward_port("gemsession", 50378, 50378)
+  end
 
   config.vm.provision :chef_solo do |chef|
      chef.cookbooks_path = ["cookbooks","site-cookbooks"]
      chef.add_recipe "virtual_gemstone::production"
+     chef.add_recipe "nginx::source"
+     chef.json.merge!({
+       :gemstone => {
+		:cache_path =>  "/vagrant/cache"
+	},
+       :monit => {
+                :start_delay => "1" #wait just one second
+	}
+     })
   #   chef.add_role "web"
   end
 end
