@@ -1,4 +1,3 @@
-
 def build_basebox(boxname='gemstone')
   cd 'veewee'
   %w{build validate export}.each do | command |
@@ -52,4 +51,27 @@ task "add_packaged_box" => ['package_box'] do
   sh("vagrant box add '#{full_box_name}' #{full_box_name}.box")
   cd '..'
 end
+
+desc "incremental build starting from fully loaded box"
+task "build_incremental" do #dependency management left to jenkins jobs
+  cd 'vagrant'
+  sh("vagrant destroy && gemstone_vm=#{full_box_name} vagrant up")
+  cd '..'
+end
+
+desc "run scripts against existing vagrant environment"
+task "provision" do
+  cd 'vagrant'
+  sh("vagrant provision")
+  cd '..'
+end
+
+desc "spin up vagrant environment"
+task "up" do
+  cd 'vagrant' 
+  sh('vagrant up')
+  cd '..'
+end
+
+
 
