@@ -17,7 +17,7 @@ Vagrant::Config.run do |config|
   # computers to access the VM, whereas host only networking does not.
   # port forwarding can be disabled for builds by setting vagrant_env 
   vagrant_env = ENV["vagrant_env"]
-  if(vagrant_vm.nil? || vagrant_env != "build")
+  if(vagrant_env.nil? || vagrant_env != "build")
     config.vm.forward_port("http",80,7778)
     config.vm.forward_port("gs64ldi", 50377, 50377)
     config.vm.forward_port("gemsession", 50378, 50378)
