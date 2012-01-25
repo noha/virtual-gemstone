@@ -25,6 +25,9 @@ Vagrant::Config.run do |config|
      chef.json.merge!({
        :gemstone => {
 		:cache_path =>  "/vagrant/cache"
+	},
+       :monit => {
+                :start_delay => "1" #wait just one second
 	}
      })
      chef.add_recipe "virtual_gemstone::production"
