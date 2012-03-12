@@ -18,9 +18,9 @@ Vagrant::Config.run do |config|
   # port forwarding can be disabled for builds by setting vagrant_env 
   vagrant_env = ENV["vagrant_env"]
   if(vagrant_env.nil? || vagrant_env != "build")
-    config.vm.forward_port("http",80,7778)
-    config.vm.forward_port("gs64ldi", 50377, 50377)
-    config.vm.forward_port("gemsession", 50378, 50378)
+    config.vm.forward_port(80,7778)
+    config.vm.forward_port(50377, 50377)
+    config.vm.forward_port(50378, 50378)
   end
 
   config.vm.provision :chef_solo do |chef|
