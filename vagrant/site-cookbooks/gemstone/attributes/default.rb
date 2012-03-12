@@ -8,4 +8,4 @@ default[:gemstone][:lock_dir] =  "/opt/gemstone/locks"
 default[:gemstone][:user] =      "gemstone"
 default[:gemstone][:no_gems] = 3
 default[:gemstone][:low_port] = 7000
-
+default[:gemstone][:cache_path] = Chef::Config[:file_cache_path]

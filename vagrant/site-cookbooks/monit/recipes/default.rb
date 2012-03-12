@@ -30,5 +30,6 @@ template "monit config" do
   owner "root"
   group "root"
   mode "0644"
+  variables ( {:start_delay => node['monit']['start_delay']} )
   notifies :restart, resources(:service => "monit")
 end
