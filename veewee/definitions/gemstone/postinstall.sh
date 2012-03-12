@@ -43,6 +43,9 @@ rm -rf rubygems-1.7.2*
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 
+# prevent invalid date spec error pop up
+sed -i -e 's/ 00:00:00.000000000Z//' /opt/ruby/lib/ruby/gems/1.8/specifications/json-1.6.1.gemspec
+
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
