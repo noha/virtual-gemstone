@@ -22,29 +22,29 @@ apt-get -y install nfs-common
 # can install their own Rubies using packages or however.
 # We must install the 1.8.x series since Puppet doesn't support
 # Ruby 1.9 yet.
-wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz
-tar xvzf ruby-1.8.7-p334.tar.gz
-cd ruby-1.8.7-p334
+wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p370.tar.gz
+tar xvzf ruby-1.8.7-p370.tar.gz
+cd ruby-1.8.7-p370
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.8.7-p334*
+rm -rf ruby-1.8.7-p370*
 
 # Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz
+tar xzf rubygems-1.8.24.tgz
+cd rubygems-1.8.24
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf rubygems-1.8.24*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 
 # prevent invalid date spec error pop up
-sed -i -e 's/ 00:00:00.000000000Z//' /opt/ruby/lib/ruby/gems/1.8/specifications/json-1.6.1.gemspec
+sed -i -e 's/ 00:00:00.000000000Z//' /opt/ruby/lib/ruby/gems/1.8/specifications/*
 
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible

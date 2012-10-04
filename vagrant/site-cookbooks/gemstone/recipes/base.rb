@@ -6,8 +6,10 @@
 #
 # All rights reserved - Do Not Redistribute
 include_recipe "gemstone::os"
+require 'net/ftp'
 
-tmp = node[:gemstone][:cache_path] 
+tmp = node[:gemstone][:cache_path]
+ftp_url = "#{node[:gemstone][:ftp_url]}"
 base_url = "#{node[:gemstone][:base_url]}"
 file = "#{node[:gemstone][:version]}.zip"
 dir = "#{node[:gemstone][:dir]}/#{node[:gemstone][:version]}"
@@ -20,15 +22,14 @@ unless File.exists?("#{dir}/version.txt")
       action :nothing
    end
 
-   http_request "HEAD #{archive_remote}" do
-      message ""
-      url archive_remote
-      action :head
-      if File.exists?(archive_local)
-         headers "If-Modified-Since" => File.mtime(archive_local).httpdate
-      end
-      notifies :create, resources(:remote_file => archive_local), :immediately
-   end
+
+  ftp = Net::FTP.new(ftp_url)
+  ftp.passive = true
+  ftp.login
+  ftp.chdir(base_url)
+  ftp.getbinaryfile(file,archive_local)
+  ftp.close
+   
 
    execute "unzip #{tmp}/#{file}" do
       cwd "#{node[:gemstone][:dir]}"
@@ -53,8 +54,8 @@ unless File.exists?("#{dir}/version.txt")
       action :create
    end
 
-#   remote_file "#{node[:gemstone][:dir]}/product/seaside/etc/gemstone.key" do
-#      source "http://seaside.gemstone.com/etc/gemstone30.key-GLASS-Linux-2CPU.txt"
-#      action :create_if_missing
-#   end
+# remote_file "#{node[:gemstone][:dir]}/product/seaside/etc/gemstone.key" do
+# source "http://seaside.gemstone.com/etc/gemstone30.key-GLASS-Linux-2CPU.txt"
+# action :create_if_missing
+# end
 end

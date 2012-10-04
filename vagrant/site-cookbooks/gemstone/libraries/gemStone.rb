@@ -39,7 +39,7 @@ exit 0\" | topaz -l"
 
    def self.updateGLASS(stoneName)
       doIt(stoneName, "| versionString |
-versionString := '1.0-beta.8.7.1'.
+versionString := '1.0-beta.8.7.3'.
 MCPlatformSupport
   autoCommit: true;
   autoMigrate: true.
