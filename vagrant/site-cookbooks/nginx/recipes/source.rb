@@ -12,8 +12,8 @@ include_recipe "nginx::base"
   end
 end
 
-nginx_source_version = "1.0.1"
-nginx_build_dir = "/vagrant/nginx_installer/nginx-1.0.1/"
+nginx_source_version = "1.2.4"
+nginx_build_dir = "/vagrant/nginx_installer/nginx-1.2.4/"
 nginx_installer_dir = "/vagrant/nginx_installer"
 
 directory "/vagrant/nginx_installer" do
@@ -32,11 +32,11 @@ script "download upload progress" do
   cwd nginx_installer_dir
   interpreter "bash"
   code <<-ENDOFSCRIPT
-wget -N --no-check-certificate https://github.com/masterzen/nginx-upload-progress-module/zipball/v0.8.2
-mv v0.8.2 nginx-upload-progress-module-v0.8.2.zip                                                             
-unzip nginx-upload-progress-module-v0.8.2.zip
+wget -N --no-check-certificate https://github.com/masterzen/nginx-upload-progress-module/zipball/v0.9.0
+mv v0.9.0 nginx-upload-progress-module-v0.9.0.zip                                                             
+unzip nginx-upload-progress-module-v0.9.0.zip
 ENDOFSCRIPT
-   not_if {FileTest.exists?(IO::File.join(nginx_installer_dir,"nginx-upload-progress-module-v0.8.2.zip"))}
+   not_if {FileTest.exists?(IO::File.join(nginx_installer_dir,"nginx-upload-progress-module-v0.9.0.zip"))}
 end
 
 execute "compile nginx from source" do
