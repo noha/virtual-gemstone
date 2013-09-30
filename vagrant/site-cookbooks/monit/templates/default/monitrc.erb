@@ -1,5 +1,5 @@
-set daemon  60           # check services every minute
-  with start delay <%= @start_delay %>   # delay the first check by delay seconds
+set daemon 60           # check services every minute
+with start delay <%= node[:monit][:start_delay] %>   # delay the first check by delay seconds
 
 set logfile /var/log/monit.log
 set idfile /var/.monit.id

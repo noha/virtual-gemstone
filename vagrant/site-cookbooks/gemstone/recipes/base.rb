@@ -14,22 +14,36 @@ dir = "#{node[:gemstone][:dir]}/#{node[:gemstone][:version]}"
 
 archive_local = "#{tmp}/#{file}"
 archive_remote = "#{base_url}/#{file}"
-unless File.exists?("#{dir}/version.txt")
-   remote_file "#{archive_local}" do
-      source "#{archive_remote}"
-      action :nothing
-   end
-
-   http_request "HEAD #{archive_remote}" do
-      message ""
-      url archive_remote
-      action :head
-      if File.exists?(archive_local)
-         headers "If-Modified-Since" => File.mtime(archive_local).httpdate
+unless File.exists?("#{node[:gemstone][:dir]}")
+   unless File.exists?("#{tmp}/#{file}")
+  # remote_file "#{archive_local}" do
+  #    source "#{archive_remote}"
+  #    #action :nothing
+  #    action :create_if_missing
+  # end
+   #
+      script "download_gemstone" do
+         interpreter "bash"
+         user "root"
+         cwd "#{tmp}"
+         code <<-EOH
+            wget ftp://ftp.gemstone.com/pub/GemStone64/3.1.0.1/#{file}
+         EOH
       end
-      notifies :create, resources(:remote_file => archive_local), :immediately
    end
+end
 
+#   http_request "HEAD #{archive_remote}" do
+#      message ""
+#      url archive_remote
+#      action :head
+#      if File.exists?(archive_local)
+#         headers "If-Modified-Since" => File.mtime(archive_local).httpdate
+#      end
+#      notifies :create, resources(:remote_file => archive_local), :immediately
+#   end
+
+unless File.exists?("#{node[:gemstone][:dir]}")
    execute "unzip #{tmp}/#{file}" do
       cwd "#{node[:gemstone][:dir]}"
    end
@@ -52,9 +66,9 @@ unless File.exists?("#{dir}/version.txt")
       mode "0755"
       action :create
    end
+end
 
 #   remote_file "#{node[:gemstone][:dir]}/product/seaside/etc/gemstone.key" do
 #      source "http://seaside.gemstone.com/etc/gemstone30.key-GLASS-Linux-2CPU.txt"
 #      action :create_if_missing
 #   end
-end

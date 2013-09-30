@@ -1,6 +1,6 @@
 define :create_stone do
    execute "creating stone #{params[:stone_name]}" do
-      command "/opt/stone-creator/bin/create-stone.sh -n #{params[:stone_name]} -d #{params[:stone_dir]} -f"
+      command "/opt/stone-creator/bin/create-stone.sh -n #{params[:stone_name]} -d #{params[:stone_dir]} -f -s 300000"
       not_if { FileTest.exists?("#{params[:stone_dir]}") }
    end
 

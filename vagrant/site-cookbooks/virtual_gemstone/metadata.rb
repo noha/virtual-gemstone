@@ -4,3 +4,6 @@ license          "Apache 2.0"
 description      "Installs/Configures vagrant_main"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.1"
+depends          "gemstone"
+depends          "stone-creator"
+depends          "monit"

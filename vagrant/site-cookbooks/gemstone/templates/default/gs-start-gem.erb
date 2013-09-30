@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# ./startSeaside30_Adaptor runs a Seaside server Gem the class WAGemStoneRunSeasideGems
+#   determines whether a FastCGI, Swazoo or Zinc adaptor is used
+#     - first argument is a label used to name files
+#     - second argument is a port number
+#
 
 if [ -s $GEMSTONE/seaside/etc/gemstone.secret ]; then
     . $GEMSTONE/seaside/etc/gemstone.secret
@@ -7,15 +13,21 @@ else
     exit 1
 fi
 
-# Requires a port number as a parameter
+# Requires a server type label as a parameter
 if [ "a$1" = "a" ]; then
+        echo 'Missing argument <server type label>'
+        exit 1
+fi
+
+# Requires a port number as a parameter
+if [ "a$2" = "a" ]; then
         echo 'Missing argument <server port number>'
         exit 1
 fi
 
-exec $GEMSTONE/bin/topaz -l -T$TEMPORARY_OBJECT_MEMORY >> $LOGFILE 2>&1 << EOF
+exec $GEMSTONE/bin/topaz -l -e $GEMSTONE/seaside/etc/seaside30.conf >> $GEMSTONE_LOGDIR/${1}_server-${2}.log 2>&1 << EOF
 
-set user $GEMSTONE_USER pass $GEMSTONE_PASSWORD gems $GEMSTONE_NAME
+set user DataCurator pass $GEMSTONE_PASSWORD gems $GEMSTONE_NAME
 
 display oops
 iferror where
@@ -33,6 +45,21 @@ file close.
 %
 
 run
+| x |
+"set _cacheName: for Gem to get unique id in statmon output. see http://code.google.com/p/glassdb/issues/detail?id=132"
+System _cacheName: ((x := '$1-' , (GsSession serialOfSession: System session) printString , '-' , System myUserProfile userId) copyFrom: 1 to: (x size min: 31)).
+%
+
+run
+
+GsProcess usingNativeCode not
+  ifTrue: [
+    "Enable remote Breakpoing handling"
+    Breakpoint trappable: true.
+    GemToGemAnnouncement installStaticHandler.
+    System commitTransaction ifFalse: [ nil error: 'Could not commit for GemToGemSignaling' ]. 
+  ].
+
 System transactionMode: #manualBegin.
 
 Exception 
@@ -61,17 +88,14 @@ System enableSignaledAbortError.
 
 GsFile gciLogServer: '$1 Server started on port ', $2 printString.
 
-WAGemStoneRunSeasideGems default adaptorClass: (Smalltalk at: #WAFastCGIAdaptor).
-GsFile gciLogServer: WAGemStoneRunSeasideGems default adaptorClass printString.
 WAGemStoneRunSeasideGems startGemServerOn: $2.
 "does not return"
-GsFile gciLogServer: '$1 on port $2 returned '.
 %
 run
 GemToGemAnnouncement uninstallStaticHandler.
 System beginTransaction.
 (ObjectLogEntry
-  fatal: '$2: topaz exit'
+  fatal: '$1: topaz exit'
   object:
     'port: ', $2 printString, ' ',
     'pid: ', (System gemVersionReport at: 'processId') printString) addToLog.

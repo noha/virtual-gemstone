@@ -5,14 +5,18 @@
 # Copyright 2011, YOUR_COMPANY_NAME
 #
 # All rights reserved - Do Not Redistribute
-user node[:gemstone][:user] do
+
+#node.default[:gemstone][:user] = "gemstone"
+#node.default[:gemstone][:dir]  = "/opt/gemstone"
+
+user node.default[:gemstone][:user] do
   action :create
   system true
   shell "/bin/bash"
 end
 
 directory node[:gemstone][:dir] do
-  owner "#{node[:gemstone][:user]}"
+  owner node[:gemstone][:user]
   mode "0755"
   action :create
 end

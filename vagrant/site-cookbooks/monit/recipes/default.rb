@@ -6,6 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+#node.default['monit']['start_delay'] = "2"
 package "monit" do
   action :install
 end
@@ -16,20 +17,23 @@ service "monit" do
 end
 
 template "monit default config" do
-  path "/etc/default/monit"
-  source "monit.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, resources(:service => "monit")
+   path "/etc/default/monit"
+   source "monit.erb"
+   owner "root"
+   group "root"
+   mode "0644"
+   notifies :restart, resources(:service => "monit")
 end
 
 template "monit config" do
-  path "/etc/monit/monitrc"
-  source "monitrc.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables ( {:start_delay => node['monit']['start_delay']} )
-  notifies :restart, resources(:service => "monit")
+   path "/etc/monit/monitrc"
+   source "monitrc.erb"
+   owner "root"
+   group "root"
+   mode "0644"
+   notifies :restart, resources(:service => "monit")
 end
+#
+#   variables({ 
+#      :start_delay => node[:monit][:start_delay] 
+#   })
